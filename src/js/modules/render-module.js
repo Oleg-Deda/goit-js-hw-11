@@ -6,8 +6,7 @@ import { simpleGallery } from './simple-lightbox';
 import {
   notifySuccessMessage,
   notifyFailureMessage,
-  notifyInfoSearchMessage,
-} from './notify-msg';
+ } from './notify-msg';
 import addMarkup from './add-markup';
 
 let searchQuery = '';
