@@ -1,2 +1,2 @@
 import './css/styles.css';
-import './js/render-module';
+import './js/modules/render-module';
