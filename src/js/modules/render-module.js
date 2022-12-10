@@ -42,7 +42,7 @@ async function fetchPhotoApi(searchQuery, pageNumber) {
 
 async function onSearchHandler(event) {
   event.preventDefault();
-  pageNumber = 1;
+  pageCounter = 1;
   observer.unobserve(loadMoreEl);
   query = imgSearchFormEl.elements.searchQuery.value.trim();
   galleryEl.innerHTML = '';
@@ -132,7 +132,7 @@ async function loadMoreOnScroll(entries) {
         },
       } = resp;
       try {
-        
+
         if (hits.length != per_page) {
           Notify.info(
             'These are the last search results, so feel free to search something else.'
