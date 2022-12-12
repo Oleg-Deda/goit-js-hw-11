@@ -3,6 +3,9 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
 
+const refs = {
+  guardRef: document.querySelector('.js-guard'),
+};
 const imgSearchFormEl = document.querySelector('.search-form');
 const galleryEl = document.querySelector('.gallery');
 const loadMoreEl = document.querySelector('.load-more');
@@ -11,7 +14,8 @@ const BASE_URL = 'https://pixabay.com/api/?key=';
 const PRIVATE_KEY = '31807807-17cb391c400c3017e2cd782ac';
 
 imgSearchFormEl.addEventListener('submit', onSearchHandler);
-let query = '';
+let totalHits  = '';
+let totalPages = 0;
 let pageCounter = 1;
 const options = {
   root: null,
@@ -85,6 +89,8 @@ async function onSearchHandler(event) {
     return query;
   }
 }
+
+
 async function onLoadMoreClickHandler() {
   pageCounter += 1;
   const {
@@ -126,7 +132,7 @@ async function loadMoreOnScroll(entries) {
       pageCounter += 1;
       const resp = await fetchPhotoApi(query, pageCounter);
       const {
-        data: { hits },
+        data: { hits,totalHits },
         config: {
           params: { per_page },
         },
@@ -157,9 +163,15 @@ async function loadMoreOnScroll(entries) {
           });
         }
       } catch (error) {
-        Notify.warning(
-          "We're sorry, but you've reached the end of search results."
-        );
+        console.log(error);
+        // Notify.warning(
+        //   "We're sorry, but you've reached the end of search results."
+      };
+      if (pageCounter === Math.round(totalHits / per_page)) {
+        observer.unobserve(refs.guardRef);
+        observerBottom.observe(refs.guardRef);
+        pageCounter = 1;
+        // );
       }
     }
   });
@@ -211,3 +223,23 @@ let gallerySimpleLightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
+const optionsBottom = {
+  root: null,
+  rootMargin: '1px',
+  threshold: 1.0,
+};
+// Observer message
+export const observerBottom = new IntersectionObserver(
+  OnBottomMessage,
+  optionsBottom
+);
+
+function OnBottomMessage(entries, observerBottom) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      Notify.warning(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
+  });
+}
