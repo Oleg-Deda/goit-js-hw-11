@@ -14,7 +14,7 @@ const BASE_URL = 'https://pixabay.com/api/?key=';
 const PRIVATE_KEY = '31807807-17cb391c400c3017e2cd782ac';
 
 imgSearchFormEl.addEventListener('submit', onSearchHandler);
-let totalHits  = '';
+let query = '';
 let totalPages = 0;
 let pageCounter = 1;
 const options = {
