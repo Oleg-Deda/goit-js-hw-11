@@ -15,7 +15,7 @@ const PRIVATE_KEY = '31807807-17cb391c400c3017e2cd782ac';
 
 imgSearchFormEl.addEventListener('submit', onSearchHandler);
 let query = '';
-let totalPages = 0;
+// let totalPages = 0;
 let pageCounter = 1;
 const options = {
   root: null,
@@ -144,7 +144,11 @@ async function loadMoreOnScroll(entries) {
             'These are the last search results, so feel free to search something else.'
           );
         }
-        if (!hits.length) {
+
+        if (pageCounter === Math.round(totalHits / per_page)) {
+        observer.unobserve(refs.guardRef);
+        observerBottom.observe(refs.guardRef);
+        pageCounter = 1;
           Notify.warning(
             "We're sorry, but you've reached the end of search results."
           );
@@ -166,11 +170,8 @@ async function loadMoreOnScroll(entries) {
         console.log(error);
         // Notify.warning(
         //   "We're sorry, but you've reached the end of search results."
-      };
-      if (pageCounter === Math.round(totalHits / per_page)) {
-        observer.unobserve(refs.guardRef);
-        observerBottom.observe(refs.guardRef);
-        pageCounter = 1;
+      // };
+
         // );
       }
     }
